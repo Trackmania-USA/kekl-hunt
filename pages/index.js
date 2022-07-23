@@ -99,7 +99,7 @@ export default function IndexPage({ myData }) {
             <div className="stat-value">{myData.mapAuthorCount}</div>
           </div>
           <div className="stat bg-primary text-primary-content ">
-            <div className="stat-title">KEKL Map Players</div>
+            <div className="stat-title">Player Count</div>
             <div className="stat-value">{playersList.length}</div>
           </div>
 
