@@ -81,42 +81,50 @@ export default function IndexPage({ myData }) {
       <h1 className='text-5xl underline'>KEKL (15 Minutes)</h1>
 
 
-      <h2>Total Track Count: {myData.maps.length}</h2>
+      <h2 className="m-5">Total Track Count: {myData.maps.length}</h2>
 
       <div className='flex'>
-      <table className="table-auto">
-        <thead>
-          <tr>
-            <th>Track</th>
-            <th>Medals</th>
-          </tr>
-        </thead>
-        <tbody>
-          {myData.maps.map((track, index) => (
-            <tr key={index}>
-              <td>{track.campaignName}</td>
-              <td>{track.name}</td>
-              <td>{track.authorCount}</td>
+        <table className="table-auto border-black border-b">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Track</th>
+              <th>Number of players who got Author Medal</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <table className="table-auto">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Medals</th>
-          </tr>
-        </thead>
-        <tbody>
-          {playersList.map((player, index) => (
-            <tr key={index}>
-              <td>{player.name}</td>
-              <td>{player.medalCount}</td>
+          </thead>
+          <tbody>
+            {myData.maps.sort(function (a, b) { return a.authorCount - b.authorCount }).map((track, index) => (
+              <tr key={index}>
+                <td className="text-center">{track.campaignName}</td>
+                <td className="text-center">{track.name}</td>
+                <td>{track.authorCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="w-10 border-r-black border-r-2	mr-10">
+
+        </div>
+
+        <table className="table-auto">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Medals</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{player.name}</td>
+                <td>{player.medalCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </main>
   )
