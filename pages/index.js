@@ -30,7 +30,7 @@ export async function getStaticProps() {
       var authorCount = 0;
 
       for (var top of record.tops) {
-        if (top.time < mapsDetail.authorScore) {
+        if (top.time <= mapsDetail.authorScore) {
           authorCount++;
           var player = myData.players[top.player.name]
 
