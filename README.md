@@ -1,5 +1,21 @@
 # kekl-hunt
 
+## Setup
+
+Install the Tailwind Intellisense VS Code plugin.
+
+Then, in VS Code, type `ctrl-shift-p`, type in `settings.json`, go to `Open Settings (JSON)`, and add these values to the json:
+```
+"tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css"
+},
+"editor.quickSuggestions": {
+    "strings": true
+}
+```
+
 ## Static export example
 
 This example show how to export to static HTML files your Next.js application fetching data from an API to generate a dynamic list of pages.
