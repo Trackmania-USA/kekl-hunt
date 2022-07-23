@@ -12,19 +12,25 @@ export async function getStaticProps() {
 
   var myData = {
     maps: [],
-    players: {}
+    players: {},
+    mapAuthorCount: 0
   }
 
+  var mapAuthors = new Set();
   for (var campaign of data.campaigns) {
 
     var campaignName = campaign.detail.campaign.name;
 
     // console.log("name, count", campaignName, campaign.mapsDetail.length);
 
+
+
     for (var mapsDetail of campaign.mapsDetail) {
       // console.log(mapsDetail)
 
       var record = campaign.mapsRecords[mapsDetail.mapUid];
+
+      mapAuthors.add(mapsDetail.author)
 
       // console.log(record)
       var authorCount = 0;
@@ -46,14 +52,17 @@ export async function getStaticProps() {
       }
 
       myData.maps.push({
-        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPp]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
-        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPp]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
         authorScore: mapsDetail.authorScore,
-        authorCount: authorCount
+        authorCount: authorCount,
       })
     }
+
+
   }
 
+  myData.mapAuthorCount = mapAuthors.size;
   return {
     props: {
       myData,
@@ -77,54 +86,77 @@ export default function IndexPage({ myData }) {
       <Head>
         KEKL Hunt
       </Head>
+      <div className="navbar bg-base-100 flex justify-between">
+        <a className="font-bold normal-case text-5xl ">KEKL (15 Minutes)</a>
+        <div className="stats shadow">
 
-      <h1 className='text-5xl underline'>KEKL (15 Minutes)</h1>
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Total Tracks</div>
+            <div className="stat-value">{myData.maps.length}</div>
+          </div>
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">KEKL Map Authors</div>
+            <div className="stat-value">{myData.mapAuthorCount}</div>
+          </div>
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">KEKL Map Players</div>
+            <div className="stat-value">{playersList.length}</div>
+          </div>
 
+        </div>
+      </div>
+      <div className='flex align-middle'>
+      
+        <div>
 
-      <h2 className="m-5">Total Track Count: {myData.maps.length}</h2>
+          <h2 className="font-semi-bold normal-case text-3xl text-center m-5">Players</h2>
 
-      <div className='flex'>
-        <table className="table-auto border-black border-b">
-          <thead>
-            <tr>
-              <th>Campaign</th>
-              <th>Track</th>
-              <th>Number of players who got Author Medal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {myData.maps.sort(function (a, b) { return a.authorCount - b.authorCount }).map((track, index) => (
-              <tr key={index}>
-                <td className="text-center">{track.campaignName}</td>
-                <td className="text-center">{track.name}</td>
-                <td>{track.authorCount}</td>
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Medals</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
+            </thead>
+            <tbody>
+              {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{player.name}</td>
+                  <td>{player.medalCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className="w-10 border-r-black border-r-2	mr-10">
 
         </div>
-
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Medals</th>
-            </tr>
-          </thead>
-          <tbody>
-            {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{player.name}</td>
-                <td>{player.medalCount}</td>
+        
+        <div>
+          <h2 className="normal-case text-3xl text-center m-5">Tracks</h2>
+          <table className="table table-zebra border-black border-b w-full">
+            <thead>
+              <tr>
+                <th>Campaign</th>
+                <th>Track</th>
+                <th>Number of players who got Author Medal</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {myData.maps.sort(function (a, b) { return a.authorCount - b.authorCount }).map((track, index) => (
+                <tr key={index}>
+                  <td className="">{track.campaignName}</td>
+                  <td className="">{track.name}</td>
+                  <td>{track.authorCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+
       </div>
     </main>
   )
