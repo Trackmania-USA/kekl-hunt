@@ -13,5 +13,10 @@
     "export": "next export",
     "prestart": "npm run export",
     "start": "serve out"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.6"
   }
 }
