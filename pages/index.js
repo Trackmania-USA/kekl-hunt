@@ -1,34 +1,73 @@
 import Head from 'next/head'
 
-import Post from '../components/post'
-
 export async function getStaticProps() {
   // fetch list of posts
   const response = await fetch(
-    'https://jsonplaceholder.typicode.com/posts?_page=1'
+    'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
   )
-  const postList = await response.json()
+  const data = await response.json()
+
+  console.log(data)
+  // do the data processing at build time!
+
+  var myData = {
+    maps: []
+  }
+
+  for (var campaign of data.campaigns) {
+
+    var campaignName = campaign.detail.campaign.name;
+
+    console.log("name, count", campaignName, campaign.mapsDetail.length);
+
+    for (var mapsDetail of campaign.mapsDetail) {
+      // console.log(mapsDetail)
+
+      var record = campaign.mapsRecords[mapsDetail.mapUid];
+
+      // console.log(record)
+      var authorCount = 0;
+
+      for (var top of record.tops) {
+        if (top.time < mapsDetail.authorScore) {
+          authorCount++;
+        }
+      }
+
+      myData.maps.push({
+        name: mapsDetail.name.replace(/\$[tiswnmgz$ohlp]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName,
+        authorScore: mapsDetail.authorScore,
+        authorCount: authorCount
+      })
+    }
+  }
+
   return {
     props: {
-      postList,
+      myData,
     },
   }
 }
 
-export default function IndexPage({ postList }) {
+export default function IndexPage({ myData }) {
+  console.log(myData.maps)
   return (
     <main>
       <Head>
-        <title>Home page</title>
+        KEKL Hunt
       </Head>
 
-      <h1>List of posts</h1>
+      <h1>KEKL (15 Minutes)</h1>
 
-      <section>
-        {postList.map((post) => (
-          <Post {...post} key={post.id} />
+      <table>
+        {myData.maps.map((track, index) => (
+          <tr key={index}>
+            <p>{track.name}</p>
+          </tr>
         ))}
-      </section>
+
+      </table>
     </main>
   )
 }

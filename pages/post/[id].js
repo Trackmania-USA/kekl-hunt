@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Head from 'next/head'
 
+// Example page
+
 export async function getStaticPaths() {
   const response = await fetch(
     'https://jsonplaceholder.typicode.com/posts?_page=1'
