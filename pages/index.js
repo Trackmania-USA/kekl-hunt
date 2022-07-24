@@ -16,18 +16,17 @@ export async function getStaticProps() {
     mapAuthorCount: 0
   }
 
+  var myMaps = []
   var mapAuthors = new Set();
+
+  var idToPlayerName = {}
   for (var campaign of data.campaigns) {
 
     var campaignName = campaign.detail.campaign.name;
 
     // console.log("name, count", campaignName, campaign.mapsDetail.length);
 
-
-
     for (var mapsDetail of campaign.mapsDetail) {
-      // console.log(mapsDetail)
-
       var record = campaign.mapsRecords[mapsDetail.mapUid];
 
       mapAuthors.add(mapsDetail.author)
@@ -36,6 +35,9 @@ export async function getStaticProps() {
       var authorCount = 0;
 
       for (var top of record.tops) {
+
+        idToPlayerName[top.player.id] = top.player.name;
+
         if (top.time <= mapsDetail.authorScore) {
           authorCount++;
           var player = myData.players[top.player.name]
@@ -51,18 +53,27 @@ export async function getStaticProps() {
         }
       }
 
-      myData.maps.push({
+      myMaps.push({
         name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
         campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
         authorScore: mapsDetail.authorScore,
         authorCount: authorCount,
+        authorId: mapsDetail.author,
+        authorName: ""
       })
     }
+  }
 
+  var allMaps = []
 
+  for (var map of myMaps) {
+    map.authorName = idToPlayerName[map.authorId]
+    allMaps.push(map)
   }
 
   myData.mapAuthorCount = mapAuthors.size;
+  myData.maps = allMaps;
+
   return {
     props: {
       myData,
@@ -141,6 +152,7 @@ export default function IndexPage({ myData }) {
               <tr>
                 <th>Campaign</th>
                 <th>Track</th>
+                <th>Author</th>
                 <th>Number of players who got Author Medal</th>
               </tr>
             </thead>
@@ -149,6 +161,7 @@ export default function IndexPage({ myData }) {
                 <tr key={index}>
                   <td className="">{track.campaignName}</td>
                   <td className="">{track.name}</td>
+                  <td className="">{track.authorName}</td>
                   <td>{track.authorCount}</td>
                 </tr>
               ))}
