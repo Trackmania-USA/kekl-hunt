@@ -97,6 +97,7 @@ export default function IndexPage({ myData }) {
   for (var player in myData.players) {
     var p = {}
     p.medalCount = myData.players[player].medalCount
+    p.WRCount = myData.players[player].WRCount
     p.name = player
     playersList.push(p)
   }
@@ -137,6 +138,7 @@ export default function IndexPage({ myData }) {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Medals</th>
+                <th>WRs</th>
               </tr>
             </thead>
             <tbody>
@@ -145,6 +147,7 @@ export default function IndexPage({ myData }) {
                   <td>{index + 1}</td>
                   <td>{player.name}</td>
                   <td>{player.medalCount}</td>
+                  <td>{player.WRCount}</td>
                 </tr>
               ))}
             </tbody>
