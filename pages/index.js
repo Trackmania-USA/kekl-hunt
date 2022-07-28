@@ -44,7 +44,7 @@ export async function getStaticProps() {
 
           if (!player) {
             player = {
-              medalCount: 0
+              medalCount: 1 
             }
           } else {
             player.medalCount++;
