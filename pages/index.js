@@ -33,7 +33,8 @@ export async function getStaticProps() {
 
       // console.log(record)
       var authorCount = 0;
-
+      var WRHolder = "";
+      var WRTime = 999999;
       for (var top of record.tops) {
 
         idToPlayerName[top.player.id] = top.player.name;
@@ -44,15 +45,23 @@ export async function getStaticProps() {
 
           if (!player) {
             player = {
-              medalCount: 1 
+              medalCount: 1, 
+              WRCount: 0
             }
           } else {
             player.medalCount++;
           }
           myData.players[top.player.name] = player
         }
-      }
 
+        if (top.time <= WRTime)
+        {
+          WRHolder = top.player.name
+          WRTime = top.time
+        }
+      }
+      myData.players[WRHolder].WRCount++
+      //console.log("wr holder ", WRHolder, myData.players[WRHolder], " got wr on ", mapsDetail.name)
       myMaps.push({
         name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
         campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
@@ -73,7 +82,7 @@ export async function getStaticProps() {
 
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
-
+  console.log(myData.players["rockskater89"])
   return {
     props: {
       myData,
