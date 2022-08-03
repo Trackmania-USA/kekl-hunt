@@ -55,15 +55,16 @@ export default function InfoPage({ data }) {
       var authorCount = 0;
       var WRHolder = "";
       var WRTime = 999999;
+      
       for (var top of record.tops) {
 
         idToPlayerName[top.player.id] = top.player.name;
+        var currentAuthor = idToPlayerName[mapsDetail.author]
 
         if (top.time <= mapsDetail.authorScore) {
           authorCount++;
           var player = myData.players[top.player.name]
 
-          
 
           if (!player) {
             player = {
@@ -80,7 +81,7 @@ export default function InfoPage({ data }) {
                 authorScore: mapsDetail.authorScore,
                 authorCount: authorCount,
                 authorId: mapsDetail.author,
-                authorName: ""
+                authorName: currentAuthor
               })
             }
 
@@ -95,7 +96,7 @@ export default function InfoPage({ data }) {
                 authorScore: mapsDetail.authorScore,
                 authorCount: authorCount,
                 authorId: mapsDetail.author,
-                authorName: ""
+                authorName: currentAuthor
               })
             }
           }
@@ -111,7 +112,7 @@ export default function InfoPage({ data }) {
             authorScore: mapsDetail.authorScore,
             authorCount: authorCount,
             authorId: mapsDetail.author,
-            authorName: ""
+            authorName: currentAuthor
           })
           userFound = true
           }
@@ -133,7 +134,7 @@ export default function InfoPage({ data }) {
           authorScore: mapsDetail.authorScore,
           authorCount: authorCount,
           authorId: mapsDetail.author,
-          authorName: ""
+          authorName: currentAuthor
         })
       }
       userFound = false
@@ -146,7 +147,7 @@ export default function InfoPage({ data }) {
         authorScore: mapsDetail.authorScore,
         authorCount: authorCount,
         authorId: mapsDetail.author,
-        authorName: ""
+        authorName: currentAuthor
       })
       
       /*myMaps.push({
@@ -185,24 +186,36 @@ export default function InfoPage({ data }) {
         KEKL Hunt
       </Head>
       <a className="font-bold normal-case text-5xl ">{username}</a>
+      
+      <br></br>
+      <p id="worldRecords">========================================================</p>
       <p><a href="#missingATs">missing ATs</a> | <a href="#collectedATs">collected ATs</a></p>
+      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
       <h1 class="text-lg">World Records: {userData.worldRecords.length}</h1><br></br>
       <ul>
-      {userData.worldRecords.map(wr => <li>-{wr.campaignName}: {wr.name}</li>)}
+      {userData.worldRecords.map(wr => <li>-<font color="red">{wr.campaignName}: </font>{wr.name} <font color="blue"> - by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${wr.authorName}`}>{wr.authorName}</a> </font></li>)}
+
+      <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
+
       </ul>
       <br></br>
-      <p id="missingATs"> ====================================</p>
+      <p id="missingATs"> ========================================================</p>
       <p><a href="#top">Top</a></p>
+      <p><a href="#worldRecords">world records</a> | <a href="#collectedATs">collected ATs</a></p>
+      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
       <h1 class="text-lg">Missing ATs: {userData.missingATs.length}</h1><br></br>
+
       <ul>
-      {userData.missingATs.map(missing => <li>-{missing.campaignName}: {missing.name}</li>)}
+      {userData.missingATs.map(missing => <li>-<font color="red">{missing.campaignName}: </font>{missing.name} <font color="blue">- by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${missing.authorName}`}>{missing.authorName}</a></font></li>)}
       </ul>
       <br></br>
-      <p id="collectedATs"> ==================================</p>
+      <p id="collectedATs"> ========================================================</p>
       <p><a href="#top">Top</a></p>
+      <p><a href="#worldRecords">world records</a> | <a href="#missingATs">missing ATs</a></p>
+      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
       <h1 class="text-lg">collected ATs: {userData.collectedATs.length}</h1><br></br>
       <ul>
-      {userData.collectedATs.map(collected => <li>-{collected.campaignName}: {collected.name}</li>)}
+      {userData.collectedATs.map(collected => <li>-<font color="red">{collected.campaignName}: </font>{collected.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${collected.authorName}`}>{collected.authorName}</a></font></li>)}
       </ul>
       
     </main>
