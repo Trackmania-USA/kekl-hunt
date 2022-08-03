@@ -26,7 +26,8 @@ export default function InfoPage({ data }) {
   var username = query.name
   var userData = {
     worldRecords: [],
-    missingATs: []
+    missingATs: [],
+    collectedATs: []
   }
   var myData = {
     maps: [],
@@ -73,6 +74,14 @@ export default function InfoPage({ data }) {
             if(top.player.name === username)
             {
               userFound = true
+              userData.collectedATs.push({
+                name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+                campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+                authorScore: mapsDetail.authorScore,
+                authorCount: authorCount,
+                authorId: mapsDetail.author,
+                authorName: ""
+              })
             }
 
           } else {
@@ -80,6 +89,14 @@ export default function InfoPage({ data }) {
             if(top.player.name === username)
             {
               userFound = true
+              userData.collectedATs.push({
+                name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+                campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+                authorScore: mapsDetail.authorScore,
+                authorCount: authorCount,
+                authorId: mapsDetail.author,
+                authorName: ""
+              })
             }
           }
           myData.players[top.player.name] = player
@@ -168,14 +185,24 @@ export default function InfoPage({ data }) {
         KEKL Hunt
       </Head>
       <a className="font-bold normal-case text-5xl ">{username}</a>
+      <p><a href="#missingATs">missing ATs</a> | <a href="#collectedATs">collected ATs</a></p>
       <h1 class="text-lg">World Records: {userData.worldRecords.length}</h1><br></br>
       <ul>
       {userData.worldRecords.map(wr => <li>-{wr.campaignName}: {wr.name}</li>)}
       </ul>
       <br></br>
+      <p id="missingATs"> ====================================</p>
+      <p><a href="#top">Top</a></p>
       <h1 class="text-lg">Missing ATs: {userData.missingATs.length}</h1><br></br>
       <ul>
       {userData.missingATs.map(missing => <li>-{missing.campaignName}: {missing.name}</li>)}
+      </ul>
+      <br></br>
+      <p id="collectedATs"> ==================================</p>
+      <p><a href="#top">Top</a></p>
+      <h1 class="text-lg">collected ATs: {userData.collectedATs.length}</h1><br></br>
+      <ul>
+      {userData.collectedATs.map(collected => <li>-{collected.campaignName}: {collected.name}</li>)}
       </ul>
       
     </main>
