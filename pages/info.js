@@ -1,16 +1,29 @@
 import Head from 'next/head'
 import {useRouter} from "next/router"
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   // fetch list of posts
   const response = await fetch(
     'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
   )
   const data = await response.json()
 
+  
+
+  return {
+    props: {
+      data
+    },
+  }
+}
+  
+
+export default function InfoPage({ data }) {
   // console.log(data)
   // do the data processing at build time!
-  var username = context.query.name
+  //var username = context.query.name
+  const { query } = useRouter();
+  var username = query.name
   var userData = {
     worldRecords: [],
     missingATs: []
@@ -140,18 +153,6 @@ export async function getServerSideProps(context) {
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
   //console.log(myData.players["rockskater89"])
-
-  return {
-    props: {
-      myData,
-      username,
-      userData
-    },
-  }
-}
-  
-
-export default function InfoPage({ myData, username, userData }) {
   var playersList = []
   for (var player in myData.players) {
     var p = {}
