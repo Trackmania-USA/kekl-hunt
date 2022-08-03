@@ -27,7 +27,8 @@ export default function InfoPage({ data }) {
   var userData = {
     worldRecords: [],
     missingATs: [],
-    collectedATs: []
+    collectedATs: [],
+    playedButNoAT: []
   }
   var myData = {
     maps: [],
@@ -115,6 +116,15 @@ export default function InfoPage({ data }) {
             authorName: currentAuthor
           })
           userFound = true
+
+          userData.playedButNoAT.push({
+            name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            authorScore: mapsDetail.authorScore,
+            authorCount: authorCount,
+            authorId: mapsDetail.author,
+            authorName: currentAuthor
+          })
           }
         }
 
@@ -189,9 +199,10 @@ export default function InfoPage({ data }) {
       
       <br></br>
       <p id="worldRecords">========================================================</p>
-      <p><a href="#missingATs">missing ATs</a> | <a href="#collectedATs">collected ATs</a></p>
-      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
-      <h1 class="text-lg">World Records: {userData.worldRecords.length}</h1><br></br>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
+      <br></br>
+      <h1 class="text-lg"><b>World Records: </b>{userData.worldRecords.length}</h1><br></br>
       <ul>
       {userData.worldRecords.map(wr => <li>-<font color="red">{wr.campaignName}: </font>{wr.name} <font color="blue"> - by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${wr.authorName}`}>{wr.authorName}</a> </font></li>)}
 
@@ -200,22 +211,34 @@ export default function InfoPage({ data }) {
       </ul>
       <br></br>
       <p id="missingATs"> ========================================================</p>
-      <p><a href="#top">Top</a></p>
-      <p><a href="#worldRecords">world records</a> | <a href="#collectedATs">collected ATs</a></p>
-      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
-      <h1 class="text-lg">Missing ATs: {userData.missingATs.length}</h1><br></br>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue">Top</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
+      <br></br>
+      <h1 class="text-lg"><b>Missing ATs: </b>{userData.missingATs.length}</h1><br></br>
 
       <ul>
       {userData.missingATs.map(missing => <li>-<font color="red">{missing.campaignName}: </font>{missing.name} <font color="blue">- by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${missing.authorName}`}>{missing.authorName}</a></font></li>)}
       </ul>
       <br></br>
       <p id="collectedATs"> ========================================================</p>
-      <p><a href="#top">Top</a></p>
-      <p><a href="#worldRecords">world records</a> | <a href="#missingATs">missing ATs</a></p>
-      <p><a href="https://kekl-hunt.pages.dev/">home</a></p>
-      <h1 class="text-lg">collected ATs: {userData.collectedATs.length}</h1><br></br>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue">Top</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
+      <br></br>
+      <h1 class="text-lg"><b>Collected ATs: </b>{userData.collectedATs.length}</h1><br></br>
       <ul>
       {userData.collectedATs.map(collected => <li>-<font color="red">{collected.campaignName}: </font>{collected.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${collected.authorName}`}>{collected.authorName}</a></font></li>)}
+      </ul>
+
+      <br></br>
+      <p id="playedButNoAT"> ========================================================</p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue"><font color="blue">Top</font></font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a></p>
+      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
+      <h1 class="text-lg"><b>Played but no AT: </b>{userData.playedButNoAT.length}</h1><br></br>
+      <ul>
+      {userData.playedButNoAT.map(played => <li>-<font color="red">{played.campaignName}: </font>{played.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${played.authorName}`}>{played.authorName}</a></font></li>)}
       </ul>
       
     </main>
