@@ -62,46 +62,29 @@ export default function InfoPage({ data }) {
         idToPlayerName[top.player.id] = top.player.name;
         var currentAuthor = idToPlayerName[mapsDetail.author]
 
+        if (!myData.players[top.player.name]) {
+          myData.players[top.player.name] = {
+            medalCount: 0,
+            WRCount: 0
+          }
+        }
         if (top.time <= mapsDetail.authorScore) {
           authorCount++;
-          var player = myData.players[top.player.name]
 
+          myData.players[top.player.name].medalCount++;
 
-          if (!player) {
-            player = {
-              medalCount: 1, 
-              WRCount: 0
-            }
-
-            if(top.player.name === username)
-            {
-              userFound = true
-              userData.collectedATs.push({
-                name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
-                campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
-                authorScore: mapsDetail.authorScore,
-                authorCount: authorCount,
-                authorId: mapsDetail.author,
-                authorName: currentAuthor
-              })
-            }
-
-          } else {
-            player.medalCount++;
-            if(top.player.name === username)
-            {
-              userFound = true
-              userData.collectedATs.push({
-                name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
-                campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
-                authorScore: mapsDetail.authorScore,
-                authorCount: authorCount,
-                authorId: mapsDetail.author,
-                authorName: currentAuthor
-              })
-            }
+          if (top.player.name === username) {
+            userFound = true
+            userData.collectedATs.push({
+              name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+              campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+              authorScore: mapsDetail.authorScore,
+              authorCount: authorCount,
+              authorId: mapsDetail.author,
+              authorName: currentAuthor
+            })
           }
-          myData.players[top.player.name] = player
+
         }
         else
         {
