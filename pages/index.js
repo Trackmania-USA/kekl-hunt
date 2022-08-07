@@ -39,23 +39,19 @@ export async function getStaticProps() {
 
         idToPlayerName[top.player.id] = top.player.name;
 
-        if (top.time <= mapsDetail.authorScore) {
-          authorCount++;
-          var player = myData.players[top.player.name]
-
-          if (!player) {
-            player = {
-              medalCount: 1, 
-              WRCount: 0
-            }
-          } else {
-            player.medalCount++;
+        if (!myData.players[top.player.name]) {
+          myData.players[top.player.name] = {
+            medalCount: 0,
+            WRCount: 0
           }
-          myData.players[top.player.name] = player
         }
 
-        if (top.time <= WRTime)
-        {
+        if (top.time <= mapsDetail.authorScore) {
+          authorCount++;
+          myData.players[top.player.name].medalCount++
+        }
+
+        if (top.time <= WRTime) {
           WRHolder = top.player.name
           WRTime = top.time
         }
