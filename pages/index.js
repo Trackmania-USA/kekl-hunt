@@ -61,7 +61,10 @@ export async function getStaticProps() {
           WRTime = top.time
         }
       }
-      myData.players[WRHolder].WRCount++
+      
+      if (WRHolder){
+        myData.players[WRHolder].WRCount++
+      }
       //console.log("wr holder ", WRHolder, myData.players[WRHolder], " got wr on ", mapsDetail.name)
       myMaps.push({
         name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
