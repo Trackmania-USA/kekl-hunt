@@ -161,7 +161,12 @@ export default function IndexPage({ myData }) {
             {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
+                <td>
+                  <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                  
+                  {player.name}</a>
+                  
+                  </td>
                 <td>{player.medalCount}</td>
                 <td>{player.WRCount}</td>
               </tr>
@@ -191,7 +196,9 @@ export default function IndexPage({ myData }) {
                   </p>
                   
                   </td>
-                <td className="">{track.authorName}</td>
+                <td className="">
+                   {track.authorName}
+                  </td>
                 <td>{track.authorCount}</td>
               </tr>
             ))}
