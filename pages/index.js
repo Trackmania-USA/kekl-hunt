@@ -22,6 +22,9 @@ export async function getStaticProps() {
   var myMaps = []
   var mapAuthors = new Set();
 
+  var authorToNumberOfMapsCreatedBy = {};
+
+
   var idToPlayerName = {}
   for (var campaign of data.campaigns) {
 
@@ -33,6 +36,13 @@ export async function getStaticProps() {
       var record = campaign.mapsRecords[mapsDetail.mapUid];
 
       mapAuthors.add(mapsDetail.author)
+
+      if (authorToNumberOfMapsCreatedBy[mapsDetail.author]) {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author]++;
+      } else {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author] = 1;
+      }
+
 
       // console.log(record)
       var authorCount = 0;
@@ -87,6 +97,12 @@ export async function getStaticProps() {
     allMaps.push(map)
   }
 
+  console.log(myData.players["rockskater89"])
+
+  for (var id of Object.keys(authorToNumberOfMapsCreatedBy)) {
+    myData.players[idToPlayerName[id]].mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
+  }
+
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
   console.log(myData.players["rockskater89"])
@@ -106,6 +122,7 @@ export default function IndexPage({ myData }) {
     p.medalCount = myData.players[player].medalCount
     p.WRCount = myData.players[player].WRCount
     p.name = player
+    p.mapCreatedCount = myData.players[player].mapCreatedCount
     playersList.push(p)
   }
 
@@ -136,13 +153,16 @@ export default function IndexPage({ myData }) {
 
         </div>
       </div>    
-      <div class="tabs tabs-boxed">
-        <button class={"tab tab-lg " + (tab==="players"? "tab-active" : "")}
+      <div className="tabs tabs-boxed">
+        <button className={"tab tab-lg " + (tab==="players"? "tab-active" : "")}
         onClick={() => setTab("players")}
         >Players</button> 
-        <button class={"tab tab-lg " + (tab==="tracks"? "tab-active" : "")}
+        <button className={"tab tab-lg " + (tab==="tracks"? "tab-active" : "")}
                 onClick={() => setTab("tracks")}
         >Tracks</button> 
+        <button className={"tab tab-lg " + (tab==="authors"? "tab-active" : "")}
+                onClick={() => setTab("authors")}
+        >Map Authors</button> 
       </div>
       <div className='w-full'>
 
@@ -198,7 +218,7 @@ export default function IndexPage({ myData }) {
                   </td>
                 <td className="">
 
-                   <a class="btn btn-accent" href={`info?name=${track.authorName}`}>{track.authorName}</a>
+                   <a className="btn btn-accent" href={`info?name=${track.authorName}`}>{track.authorName}</a>
 
                   </td>
                 <td>{track.authorCount}</td>
@@ -209,6 +229,36 @@ export default function IndexPage({ myData }) {
       </div>
     : <></>)}
 
+    {(tab==="authors"? 
+        <div className="flex align-middle justify-center pt-4">
+        <table className="table table-zebra border-black border-b">
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>Number of Maps Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {playersList.filter(function (a) {return a.mapCreatedCount}).sort(function (a, b) { return b.mapCreatedCount - a.mapCreatedCount }).map((player, index) => (
+              <tr key={index}>
+                <td className="">
+                <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                  
+                  {player.name}</a>
+                  </td>
+
+
+                <td className="">
+                  <p className="max-w-xl truncate">
+                    {player.mapCreatedCount}
+                  </p>
+                  </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    : <></>)}
       </div>
     </main>
   )

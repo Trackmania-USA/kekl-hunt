@@ -43,6 +43,7 @@ export default function InfoPage({ data }) {
   var myMaps = []
   var mapAuthors = new Set();
   var userFound = false
+  var authorToNumberOfMapsCreatedBy = {};
 
   var idToPlayerName = {}
   for (var campaign of data.campaigns) {
@@ -55,6 +56,15 @@ export default function InfoPage({ data }) {
       var record = campaign.mapsRecords[mapsDetail.mapUid];
 
       mapAuthors.add(mapsDetail.author)
+
+
+      
+      if (authorToNumberOfMapsCreatedBy[mapsDetail.author]) {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author]++;
+      } else {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author] = 1;
+      }
+
 
       // console.log(record)
       var authorCount = 0;
@@ -170,6 +180,12 @@ export default function InfoPage({ data }) {
     map.authorName = idToPlayerName[map.authorId]
     allMaps.push(map)
   }
+  var mapCreatedCount = 0;
+  for (var id of Object.keys(authorToNumberOfMapsCreatedBy)) {
+    if (username === idToPlayerName[id]) {
+      mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
+    }
+  }
 
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
@@ -184,7 +200,6 @@ export default function InfoPage({ data }) {
   }
 
   const [tab, setTab] = useState("missing");
-
 
   return (
     <main>
@@ -220,10 +235,13 @@ export default function InfoPage({ data }) {
             <div className="stat-value">{userData.missingATs.length}</div>
             <div class="stat-desc">by {username}</div>
           </div>
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Created Maps</div>
+            <div className="stat-value">{mapCreatedCount ? mapCreatedCount : 0}</div>
+            <div class="stat-desc">by {username}</div>
+          </div>
         </div>
       </div> 
-
-
 
       <div class="tabs tabs-boxed">
         <a class={"tab tab-lg "}
@@ -258,8 +276,8 @@ export default function InfoPage({ data }) {
           <tbody>
 
             {userData.worldRecords.map(wr => 
-            <tr>
-              <td className="">{wr.campaignName}</td>
+              <tr key={wr.campaignName + "." + wr.name}>
+                <td className="">{wr.campaignName}</td>
               <td className="max-w-xl truncate">{wr.name}</td>
               <td className="">
               <a class="btn btn-accent" href={`info?name=${wr.authorName}`}>{wr.authorName}</a>
@@ -286,7 +304,7 @@ export default function InfoPage({ data }) {
 
                    {userData.missingATs.map(missing =>
                         
-                     <tr>
+                        <tr key={missing.campaignName + "." + missing.name}>
                         <td className="">{missing.campaignName}</td>
                         <td className="max-w-xl truncate">{missing.name}</td>
                         <td className="">
@@ -316,7 +334,7 @@ export default function InfoPage({ data }) {
 
                    {userData.collectedATs.map(collected =>
                         
-                     <tr>
+                        <tr key={collected.campaignName + "." + collected.name}>
                         <td className="">{collected.campaignName}</td>
                         <td className="max-w-xl truncate">{collected.name}</td>
                         <td className="">
@@ -347,7 +365,7 @@ export default function InfoPage({ data }) {
 
              {userData.playedButNoAT.map(played =>
                   
-               <tr>
+               <tr key={played.campaignName + "." + played.name}>
                   <td className="">{played.campaignName}</td>
                   <td className="max-w-xl truncate">{played.name}</td>
                   <td className="">
