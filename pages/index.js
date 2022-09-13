@@ -1,4 +1,7 @@
 import Head from 'next/head'
+import {
+  useState
+}  from 'react'
 
 export async function getStaticProps() {
   // fetch list of posts
@@ -106,6 +109,9 @@ export default function IndexPage({ myData }) {
     playersList.push(p)
   }
 
+  const [tab, setTab] = useState("players");
+
+
   return (
     <main>
       <Head>
@@ -129,62 +135,70 @@ export default function IndexPage({ myData }) {
           </div>
 
         </div>
+      </div>    
+      <div class="tabs tabs-boxed">
+        <button class={"tab tab-lg " + (tab==="players"? "tab-active" : "")}
+        onClick={() => setTab("players")}
+        >Players</button> 
+        <button class={"tab tab-lg " + (tab==="tracks"? "tab-active" : "")}
+                onClick={() => setTab("tracks")}
+        >Tracks</button> 
       </div>
-      <div className='flex align-middle'>
-      
-        <div>
+      <div className='w-full'>
 
-          <h2 className="font-semi-bold normal-case text-3xl text-center m-5">Players</h2>
-
-          <table className="table table-zebra w-full">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Medals</th>
-                <th>WRs</th>
+      {(tab==="players"? 
+        <div className="flex align-middle justify-center pt-4">
+        <table className="table table-zebra ">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Medals</th>
+              <th>WRs</th>
+            </tr>
+          </thead>
+          <tbody>
+            {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
+                <td>{player.medalCount}</td>
+                <td>{player.WRCount}</td>
               </tr>
-            </thead>
-            <tbody>
-              {playersList.sort(function (a, b) { return b.medalCount - a.medalCount }).map((player, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
-                  <td>{player.medalCount}</td>
-                  <td>{player.WRCount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="w-10 border-r-black border-r-2	mr-10">
+            ))}
+          </tbody>
+        </table>
+      </div>      : <></>)}
+      {(tab==="tracks"? 
+        <div className="flex align-middle justify-center pt-4">
+        <table className="table table-zebra border-black border-b">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Track</th>
+              <th>Author</th>
+              <th>Number of players who got Author Medal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {myData.maps.sort(function (a, b) { return a.authorCount - b.authorCount }).map((track, index) => (
+              <tr key={index}>
+                <td className="">{track.campaignName}</td>
+                <td className="">
+                  <p className="max-w-xl truncate">
+                  {track.name}
 
-        </div>
-        
-        <div>
-          <h2 className="normal-case text-3xl text-center m-5">Tracks</h2>
-          <table className="table table-zebra border-black border-b w-full">
-            <thead>
-              <tr>
-                <th>Campaign</th>
-                <th>Track</th>
-                <th>Author</th>
-                <th>Number of players who got Author Medal</th>
+                  </p>
+                  
+                  </td>
+                <td className="">{track.authorName}</td>
+                <td>{track.authorCount}</td>
               </tr>
-            </thead>
-            <tbody>
-              {myData.maps.sort(function (a, b) { return a.authorCount - b.authorCount }).map((track, index) => (
-                <tr key={index}>
-                  <td className="">{track.campaignName}</td>
-                  <td className="">{track.name}</td>
-                  <td className="">{track.authorName}</td>
-                  <td>{track.authorCount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+            ))}
+          </tbody>
+        </table>
+      </div>
+    : <></>)}
 
       </div>
     </main>
