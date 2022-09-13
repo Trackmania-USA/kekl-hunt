@@ -136,7 +136,9 @@ export default function InfoPage({ data }) {
       }
       userFound = false
       
-      myData.players[WRHolder].WRCount++
+      if (WRHolder){
+        myData.players[WRHolder].WRCount++
+      }
       //if(username === WRHolder) userData.worldRecords.push(mapsDetail);
       if(username === WRHolder) userData.worldRecords.push({
         name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
