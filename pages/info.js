@@ -245,13 +245,31 @@ export default function InfoPage({ data }) {
 
 
       {tab === "wrs" ? 
-            <ul>
+      <div className="flex align-middle justify-center pt-4">
 
-            {userData.worldRecords.map(wr => <li>-<font color="red">{wr.campaignName}: </font>{wr.name} <font color="blue"> - by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${wr.authorName}`}>{wr.authorName}</a> </font></li>)}
-      
-            <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
-      
-            </ul>
+        <table className="table table-zebra ">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Track</th>
+              <th>Author</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {userData.worldRecords.map(wr => 
+            <tr>
+              <td className="">{wr.campaignName}</td>
+              <td className="">{wr.name}</td>
+              <td className="">
+              <a class="btn btn-accent" href={`info?name=${wr.authorName}`}>{wr.authorName}</a>
+              
+              </td>
+            </tr>
+            )}      
+            </tbody>
+        </table>
+        </div>
       : <></>}
       {tab === "missing" ? 
             <ul>
