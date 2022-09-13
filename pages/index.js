@@ -35,6 +35,11 @@ export async function getStaticProps() {
       var authorCount = 0;
       var WRHolder = "";
       var WRTime = 999999;
+      
+      if (!record.tops) {
+        record.tops = []; 
+      }
+      
       for (var top of record.tops) {
 
         idToPlayerName[top.player.id] = top.player.name;
