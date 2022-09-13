@@ -197,7 +197,9 @@ export default function IndexPage({ myData }) {
                   
                   </td>
                 <td className="">
-                   {track.authorName}
+
+                   <a class="btn btn-accent" href={`info?name=${track.authorName}`}>{track.authorName}</a>
+
                   </td>
                 <td>{track.authorCount}</td>
               </tr>
