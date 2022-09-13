@@ -1,6 +1,10 @@
 import Head from 'next/head'
 import {useRouter} from "next/router"
 
+import {
+  useState
+}  from 'react'
+
 export async function getStaticProps(context) {
   // fetch list of posts
   const response = await fetch(
@@ -179,56 +183,91 @@ export default function InfoPage({ data }) {
     playersList.push(p)
   }
 
+  const [tab, setTab] = useState("missing");
+
+
   return (
     <main>
       <Head>
-        KEKL Hunt
+        KEKL Hunt - {username}
       </Head>
-      <a className="font-bold normal-case text-5xl ">{username}</a>
+
+      <div className="navbar bg-base-100 flex justify-between">
+        <a className="font-bold normal-case text-5xl ">{username}</a>
+        <div className="stats shadow">
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">World Records</div>
+            <div className="stat-value">{userData.worldRecords.length}</div>
+            <div class="stat-desc">by {username}</div>
+          </div>
+
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Collected ATs</div>
+            <div className="stat-value">{userData.collectedATs.length}</div>
+            <div class="stat-desc">by {username}</div>
+          </div>
+
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Played Maps</div>
+            <div className="stat-value">{  
+              userData.playedButNoAT.length + userData.collectedATs.length
+            }</div>
+            <div class="stat-desc">by {username}</div>
+          </div>
+
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Missing ATs</div>
+            <div className="stat-value">{userData.missingATs.length}</div>
+            <div class="stat-desc">by {username}</div>
+          </div>
+        </div>
+      </div> 
+
+
+
+      <div class="tabs tabs-boxed">
+        <a class={"tab tab-lg "}
+                href="/"
+        >Home</a> 
+        <button class={"tab tab-lg " + (tab==="wrs"? "tab-active" : "")}
+        onClick={() => setTab("wrs")}
+        >World Records</button> 
+        <button class={"tab tab-lg " + (tab==="missing"? "tab-active" : "")}
+        onClick={() => setTab("missing")}
+        >Missing ATs</button> 
+        <button class={"tab tab-lg " + (tab==="collected"? "tab-active" : "")}
+                onClick={() => setTab("collected")}
+        >Collected ATs</button> 
+        <button class={"tab tab-lg " + (tab==="played"? "tab-active" : "")}
+                onClick={() => setTab("played")}
+        >Played but no AT</button> 
+      </div>
+
+
+      {tab === "wrs" ? 
+            <ul>
+
+            {userData.worldRecords.map(wr => <li>-<font color="red">{wr.campaignName}: </font>{wr.name} <font color="blue"> - by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${wr.authorName}`}>{wr.authorName}</a> </font></li>)}
       
-      <br></br>
-      <p id="worldRecords">========================================================</p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
-      <br></br>
-      <h1 class="text-lg"><b>World Records: </b>{userData.worldRecords.length}</h1><br></br>
-      <ul>
-      {userData.worldRecords.map(wr => <li>-<font color="red">{wr.campaignName}: </font>{wr.name} <font color="blue"> - by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${wr.authorName}`}>{wr.authorName}</a> </font></li>)}
-
-      <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
-
-      </ul>
-      <br></br>
-      <p id="missingATs"> ========================================================</p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue">Top</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
-      <br></br>
-      <h1 class="text-lg"><b>Missing ATs: </b>{userData.missingATs.length}</h1><br></br>
-
-      <ul>
-      {userData.missingATs.map(missing => <li>-<font color="red">{missing.campaignName}: </font>{missing.name} <font color="blue">- by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${missing.authorName}`}>{missing.authorName}</a></font></li>)}
-      </ul>
-      <br></br>
-      <p id="collectedATs"> ========================================================</p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue">Top</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#playedButNoAT"><font color="blue">Played but no AT</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
-      <br></br>
-      <h1 class="text-lg"><b>Collected ATs: </b>{userData.collectedATs.length}</h1><br></br>
-      <ul>
-      {userData.collectedATs.map(collected => <li>-<font color="red">{collected.campaignName}: </font>{collected.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${collected.authorName}`}>{collected.authorName}</a></font></li>)}
-      </ul>
-
-      <br></br>
-      <p id="playedButNoAT"> ========================================================</p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#top"><font color="blue"><font color="blue">Top</font></font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="#worldRecords"><font color="blue">World Records</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#missingATs"><font color="blue">Missing ATs</font></a> | <a class="hover:bg-blue-500 hover:text-white" href="#collectedATs"><font color="blue">Collected ATs</font></a></p>
-      <p><a class="hover:bg-blue-500 hover:text-white" href="https://kekl-hunt.pages.dev/"><font color="blue">Home</font></a></p>
-      <h1 class="text-lg"><b>Played but no AT: </b>{userData.playedButNoAT.length}</h1><br></br>
-      <ul>
-      {userData.playedButNoAT.map(played => <li>-<font color="red">{played.campaignName}: </font>{played.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${played.authorName}`}>{played.authorName}</a></font></li>)}
-      </ul>
+            <td><a class="hover:bg-blue-500 hover:text-white" href={`info?name=${player.name}`}>{player.name}</a></td>
+      
+            </ul>
+      : <></>}
+      {tab === "missing" ? 
+            <ul>
+            {userData.missingATs.map(missing => <li>-<font color="red">{missing.campaignName}: </font>{missing.name} <font color="blue">- by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${missing.authorName}`}>{missing.authorName}</a></font></li>)}
+            </ul>
+      : <></>}
+      {tab === "collected" ? 
+            <ul>
+            {userData.collectedATs.map(collected => <li>-<font color="red">{collected.campaignName}: </font>{collected.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${collected.authorName}`}>{collected.authorName}</a></font></li>)}
+            </ul>
+      : <></>}
+      {tab === "played" ? 
+            <ul>
+            {userData.playedButNoAT.map(played => <li>-<font color="red">{played.campaignName}: </font>{played.name} <font color="blue"> by <a class="hover:bg-blue-500 hover:text-white" href={`info?name=${played.authorName}`}>{played.authorName}</a></font></li>)}
+            </ul>
+      : <></>}
       
     </main>
   )
