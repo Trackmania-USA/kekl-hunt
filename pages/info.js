@@ -249,16 +249,16 @@ export default function InfoPage({ data }) {
         >Home</a> 
         <button class={"tab tab-lg " + (tab==="wrs"? "tab-active" : "")}
         onClick={() => setTab("wrs")}
-        >World Records</button> 
-        <button class={"tab tab-lg " + (tab==="missing"? "tab-active" : "")}
-        onClick={() => setTab("missing")}
-        >Missing ATs</button> 
+        >World Records</button>
         <button class={"tab tab-lg " + (tab==="collected"? "tab-active" : "")}
-                onClick={() => setTab("collected")}
+        onClick={() => setTab("collected")}
         >Collected ATs</button> 
         <button class={"tab tab-lg " + (tab==="played"? "tab-active" : "")}
                 onClick={() => setTab("played")}
         >Played but no AT</button> 
+        <button class={"tab tab-lg " + (tab==="missing"? "tab-active" : "")}
+        onClick={() => setTab("missing")}
+        >Missing ATs</button> 
       </div>
 
 
