@@ -234,6 +234,7 @@ export default function IndexPage({ myData }) {
         <table className="table table-zebra border-black border-b">
           <thead>
             <tr>
+              <th>Rank</th>
               <th>Author</th>
               <th>Number of Maps Created</th>
             </tr>
@@ -241,6 +242,9 @@ export default function IndexPage({ myData }) {
           <tbody>
             {playersList.filter(function (a) {return a.mapCreatedCount}).sort(function (a, b) { return b.mapCreatedCount - a.mapCreatedCount }).map((player, index) => (
               <tr key={index}>
+                <td>
+                  {index + 1}
+                </td>
                 <td className="">
                 <a className="btn btn-accent" href={`info?name=${player.name}`}>
                   
