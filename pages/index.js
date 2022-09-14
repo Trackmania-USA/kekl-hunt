@@ -126,7 +126,7 @@ export default function IndexPage({ myData }) {
     playersList.push(p)
   }
 
-  const [tab, setTab] = useState("players");
+  const [tab, setTab] = useState("ats");
 
 
   return (
@@ -154,9 +154,12 @@ export default function IndexPage({ myData }) {
         </div>
       </div>    
       <div className="tabs tabs-boxed">
-        <button className={"tab tab-lg " + (tab==="players"? "tab-active" : "")}
-        onClick={() => setTab("players")}
-        >Players</button> 
+        <button className={"tab tab-lg " + (tab==="ats"? "tab-active" : "")}
+        onClick={() => setTab("ats")}
+        >Author Medals</button> 
+        <button className={"tab tab-lg " + (tab==="wrs"? "tab-active" : "")}
+        onClick={() => setTab("wrs")}
+        >World Records</button> 
         <button className={"tab tab-lg " + (tab==="tracks"? "tab-active" : "")}
                 onClick={() => setTab("tracks")}
         >Tracks</button> 
@@ -166,7 +169,7 @@ export default function IndexPage({ myData }) {
       </div>
       <div className='w-full'>
 
-      {(tab==="players"? 
+      {(tab==="ats"? 
         <div className="flex align-middle justify-center pt-4">
         <table className="table table-zebra ">
           <thead>
@@ -174,7 +177,6 @@ export default function IndexPage({ myData }) {
               <th>Rank</th>
               <th>Name</th>
               <th>Medals</th>
-              <th>WRs</th>
             </tr>
           </thead>
           <tbody>
@@ -188,7 +190,32 @@ export default function IndexPage({ myData }) {
                   
                   </td>
                 <td>{player.medalCount}</td>
-                <td>{player.WRCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>      : <></>)}
+      {(tab==="wrs"? 
+        <div className="flex align-middle justify-center pt-4">
+        <table className="table table-zebra ">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>World Records</th>
+            </tr>
+          </thead>
+          <tbody>
+            {playersList.sort(function (a, b) { return b.WRCount - a.WRCount }).map((player, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>
+                  <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                  
+                  {player.name}</a>
+                  
+                  </td>
+                 <td>{player.WRCount}</td>
               </tr>
             ))}
           </tbody>
