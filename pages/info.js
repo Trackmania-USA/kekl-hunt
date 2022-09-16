@@ -32,7 +32,8 @@ export default function InfoPage({ data }) {
     worldRecords: [],
     missingATs: [],
     collectedATs: [],
-    playedButNoAT: []
+    playedButNoAT: [],
+    createdMaps: []
   }
   var myData = {
     maps: [],
@@ -54,17 +55,12 @@ export default function InfoPage({ data }) {
 
     for (var mapsDetail of campaign.mapsDetail) {
       var record = campaign.mapsRecords[mapsDetail.mapUid];
-
-      mapAuthors.add(mapsDetail.author)
-
-
       
       if (authorToNumberOfMapsCreatedBy[mapsDetail.author]) {
         authorToNumberOfMapsCreatedBy[mapsDetail.author]++;
       } else {
         authorToNumberOfMapsCreatedBy[mapsDetail.author] = 1;
       }
-
 
       // console.log(record)
       var authorCount = 0;
@@ -174,6 +170,7 @@ export default function InfoPage({ data }) {
     }
   }
 
+
   var allMaps = []
 
   for (var map of myMaps) {
@@ -190,6 +187,29 @@ export default function InfoPage({ data }) {
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
   //console.log(myData.players["rockskater89"])
+
+  for (var campaign of data.campaigns) {
+
+    console.log("createdMaps", userData.createdMaps)
+    var campaignName = campaign.detail.campaign.name;
+
+   for (var mapsDetail of campaign.mapsDetail) {
+
+    console.log("author", idToPlayerName[mapsDetail.author], username)
+    
+    if (username == idToPlayerName[mapsDetail.author]) {
+      userData.createdMaps.push({
+        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        id: mapsDetail.mapUid,
+        authorName: username
+      })
+    }
+   }
+  }
+
+  console.log(userData.createdMaps)
+
   var playersList = []
   for (var player in myData.players) {
     var p = {}
@@ -213,13 +233,13 @@ export default function InfoPage({ data }) {
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">World Records</div>
             <div className="stat-value">{userData.worldRecords.length}</div>
-            <div class="stat-desc">by {username}</div>
+            <div className="stat-desc">by {username}</div>
           </div>
 
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">Collected ATs</div>
             <div className="stat-value">{userData.collectedATs.length}</div>
-            <div class="stat-desc">by {username}</div>
+            <div className="stat-desc">by {username}</div>
           </div>
 
           <div className="stat bg-primary text-primary-content ">
@@ -227,38 +247,41 @@ export default function InfoPage({ data }) {
             <div className="stat-value">{  
               userData.playedButNoAT.length + userData.collectedATs.length
             }</div>
-            <div class="stat-desc">by {username}</div>
+            <div className="stat-desc">by {username}</div>
           </div>
 
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">Missing ATs</div>
             <div className="stat-value">{userData.missingATs.length}</div>
-            <div class="stat-desc">by {username}</div>
+            <div className="stat-desc">by {username}</div>
           </div>
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">Created Maps</div>
             <div className="stat-value">{mapCreatedCount ? mapCreatedCount : 0}</div>
-            <div class="stat-desc">by {username}</div>
+            <div className="stat-desc">by {username}</div>
           </div>
         </div>
       </div> 
 
-      <div class="tabs tabs-boxed">
-        <a class={"tab tab-lg "}
+      <div className="tabs tabs-boxed">
+        <a className={"tab tab-lg "}
                 href="/"
         >Home</a> 
-        <button class={"tab tab-lg " + (tab==="wrs"? "tab-active" : "")}
+        <button className={"tab tab-lg " + (tab==="wrs"? "tab-active" : "")}
         onClick={() => setTab("wrs")}
         >World Records</button>
-        <button class={"tab tab-lg " + (tab==="collected"? "tab-active" : "")}
+        <button className={"tab tab-lg " + (tab==="collected"? "tab-active" : "")}
         onClick={() => setTab("collected")}
         >Collected ATs</button> 
-        <button class={"tab tab-lg " + (tab==="played"? "tab-active" : "")}
+        <button className={"tab tab-lg " + (tab==="played"? "tab-active" : "")}
                 onClick={() => setTab("played")}
         >Played but no AT</button> 
-        <button class={"tab tab-lg " + (tab==="missing"? "tab-active" : "")}
+        <button className={"tab tab-lg " + (tab==="missing"? "tab-active" : "")}
         onClick={() => setTab("missing")}
         >Missing ATs</button> 
+        <button className={"tab tab-lg " + (tab==="created"? "tab-active" : "")}
+        onClick={() => setTab("created")}
+        >Created Maps</button> 
       </div>
 
 
@@ -280,7 +303,7 @@ export default function InfoPage({ data }) {
                 <td className="">{wr.campaignName}</td>
               <td className="max-w-xl truncate">{wr.name}</td>
               <td className="">
-              <a class="btn btn-accent" href={`info?name=${wr.authorName}`}>{wr.authorName}</a>
+              <a className="btn btn-accent" href={`info?name=${wr.authorName}`}>{wr.authorName}</a>
               
               </td>
             </tr>
@@ -308,7 +331,7 @@ export default function InfoPage({ data }) {
                         <td className="">{missing.campaignName}</td>
                         <td className="max-w-xl truncate">{missing.name}</td>
                         <td className="">
-                        <a class="btn btn-accent" href={`info?name=${missing.authorName}`}>{missing.authorName}</a>
+                        <a className="btn btn-accent" href={`info?name=${missing.authorName}`}>{missing.authorName}</a>
                         
                         </td>
                       </tr>
@@ -338,7 +361,7 @@ export default function InfoPage({ data }) {
                         <td className="">{collected.campaignName}</td>
                         <td className="max-w-xl truncate">{collected.name}</td>
                         <td className="">
-                        <a class="btn btn-accent" href={`info?name=${collected.authorName}`}>{collected.authorName}</a>
+                        <a className="btn btn-accent" href={`info?name=${collected.authorName}`}>{collected.authorName}</a>
                         
                         </td>
                       </tr>
@@ -369,7 +392,7 @@ export default function InfoPage({ data }) {
                   <td className="">{played.campaignName}</td>
                   <td className="max-w-xl truncate">{played.name}</td>
                   <td className="">
-                  <a class="btn btn-accent" href={`info?name=${played.authorName}`}>{played.authorName}</a>
+                  <a className="btn btn-accent" href={`info?name=${played.authorName}`}>{played.authorName}</a>
                   
                   </td>
                 </tr>
@@ -380,7 +403,36 @@ export default function InfoPage({ data }) {
   </div>  
 
       : <></>}
-      
+      {tab === "created" ? 
+      <div className="flex align-middle justify-center pt-4">
+
+      <table className="table table-zebra ">
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th>Track</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+
+                   {userData.createdMaps.map(created =>
+                        
+                        <tr key={created.campaignName + "." + created.name}>
+                        <td className="">{created.campaignName}</td>
+                        <td className="max-w-xl truncate">{created.name}</td>
+                        <td className="">
+                        <a className="btn btn-accent" href={`info?name=${created.authorName}`}>{created.authorName}</a>
+                        
+                        </td>
+                      </tr>
+                                              
+                        )}
+            </tbody>
+        </table>
+        </div>  
+        
+      : <></>}
     </main>
   )
 }
