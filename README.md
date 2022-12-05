@@ -1,5 +1,9 @@
 # kekl-hunt
 
+## Gitpod.io
+
+The easiest way to get set up with development is to open the project on [gitpod.io](https://www.gitpod.io/). It lets you edit and run the code for free and you don't have to install anything! It's all in the browser.
+
 ## Setup
 
 Install the Tailwind Intellisense VS Code plugin.
