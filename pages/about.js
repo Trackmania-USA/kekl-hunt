@@ -20,10 +20,10 @@ export default function AboutPage() {
                 <div class="divider">Weekly Schedule</div>
                 <p>
 
-                    5:45 PM Tuesdays TM2 <br></br>
-                    5:45 PM Wednesdays TM2020<br></br>
-                    4:30 PM Fridays TM2<br></br>
-                    9:00 PM Saturdays TM2020<br></br>
+                    5:45 PM CT Tuesdays TM2 <br></br>
+                    5:45 PM CT Wednesdays TM2020<br></br>
+                    4:30 PM CT Fridays TM2<br></br>
+                    9:00 PM CT Saturdays TM2020<br></br>
                 </p>
                 <div class="divider">Rules</div>
 
