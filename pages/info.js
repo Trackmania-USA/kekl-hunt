@@ -190,12 +190,12 @@ export default function InfoPage({ data }) {
 
   for (var campaign of data.campaigns) {
 
-    console.log("createdMaps", userData.createdMaps)
+  //  console.log("createdMaps", userData.createdMaps)
     var campaignName = campaign.detail.campaign.name;
 
    for (var mapsDetail of campaign.mapsDetail) {
 
-    console.log("author", idToPlayerName[mapsDetail.author], username)
+   // console.log("author", idToPlayerName[mapsDetail.author], username)
     
     if (username == idToPlayerName[mapsDetail.author]) {
       userData.createdMaps.push({
@@ -208,7 +208,7 @@ export default function InfoPage({ data }) {
    }
   }
 
-  console.log(userData.createdMaps)
+ // console.log(userData.createdMaps)
 
   var playersList = []
   for (var player in myData.players) {

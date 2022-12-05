@@ -136,6 +136,9 @@ export default function IndexPage({ myData }) {
       </Head>
       <div className="navbar bg-base-100 flex justify-between">
         <a className="font-bold normal-case text-5xl ">KEKL (15 Minutes)</a>
+        
+        <a className="btn btn-secondary" href="/about">
+                  About and Rules!</a>
         <div className="stats shadow">
 
           <div className="stat bg-primary text-primary-content ">

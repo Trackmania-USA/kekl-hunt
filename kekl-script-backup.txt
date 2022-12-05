@@ -1,0 +1,96 @@
+#RequireContext CMapEditorPlugin
+#Include "TimeLib" as TimeLib
+#Include "TextLib" as TL
+
+Text getManialink() {
+	return """
+	<manialink version="3">
+	<label pos="0 79.4" z-index="0" size="100 7" text="$00F$O$S$I$WK$C3CE$0C9K$FC0L" textfont="GameFontBlack" halign="center" valign="center2" textsize="5"/>
+	<frame id="info">
+	<label id="start" pos="0 70" z-index="0" size="20 5" text="Start" style="CardButtonMediumL" translate="0" scriptevents="1" halign="center" valign="center"/>
+	</frame>
+
+	<frame id="timers" hidden="1">
+	<label id="phase" pos="0 73" z-index="0" size="50 6" halign="center" valign="center2" textfont="GameFontRegular" text="Build Phase" textprefix="$s"/>
+	<label id="time" pos="0 68" z-index="0" size="50 5" halign="center" valign="center2" textfont="GameFontSemiBold" textprefix="$s" text="15min"/>
+	</frame>
+
+	<script><!--
+	main() {
+		declare CMlFrame infoFrame = Page.GetFirstChild("info") as CMlFrame;
+		declare CMlFrame timerFrame = Page.GetFirstChild("timers") as CMlFrame;
+
+		while(True) {
+			yield;
+			foreach (Event in PendingEvents) {
+				if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.ControlId == "start") {
+					SendCustomEvent("Start", [""]);
+					infoFrame.Hide();
+					timerFrame.Show();
+				}
+			}
+		}
+
+	}
+	--></script>
+
+	</manialink>
+	""";
+}
+
+
+main() {
+	declare Integer End = -1;
+	declare Integer Phase = 0;
+	declare Integer oldPhase = 0;
+	ManialinkText = getManialink();
+	yield;
+	declare PhaseLabel <=> ManialinkPage.GetFirstChild("phase") as CMlLabel;
+	declare TimeLabel <=> ManialinkPage.GetFirstChild("time") as CMlLabel;
+
+	while(True)
+	{
+		yield;
+		foreach (Event in PendingEvents) {
+			if (Event.Type == CMapEditorPluginEvent::Type::LayerCustomEvent) {
+				if (Event.CustomEventType == "Start") {
+					Phase = 1;
+				}
+			}
+		}
+
+		if (oldPhase != Phase) {
+			oldPhase = Phase;
+			switch(Phase) {
+				case 1: {
+					PhaseLabel.Value = "Build Phase";
+					End = Now + 15 * 60 * 1000;
+				}
+				case 2: {
+					PhaseLabel.Value = "Validation Phase";
+					End = Now + 5 * 60 * 1000;
+				}
+				case 3: {
+					PhaseLabel.Value = "Save Map!";
+					TimeLabel.Value = "Now";
+					End = -1;
+				}
+			}
+		}
+		
+		if (Phase == 3) {
+			EditMode = CMapEditorPlugin::EditMode::FreeLook;
+		}
+		
+		if (End != -1) {
+			declare Delta = End - Now;
+			TimeLabel.Value = (Delta/1000/60)^" Min "^ (Delta/1000)%60^" Sec";
+
+			if (Delta < 0.) {
+				Phase += 1;
+			}
+		}
+			
+	
+	}
+}
