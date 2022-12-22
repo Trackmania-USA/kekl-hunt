@@ -93,14 +93,17 @@ export async function getStaticProps() {
   var allMaps = []
 
   for (var map of myMaps) {
-    map.authorName = idToPlayerName[map.authorId]
+
+    // author must play at least 1 kekl map for name to appear
+    map.authorName = idToPlayerName[map.authorId] ? idToPlayerName[map.authorId] : "author"
     allMaps.push(map)
   }
 
   console.log(myData.players["rockskater89"])
-
   for (var id of Object.keys(authorToNumberOfMapsCreatedBy)) {
-    myData.players[idToPlayerName[id]].mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
+    if (myData.players[idToPlayerName[id]]) {
+      myData.players[idToPlayerName[id]].mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
+    }
   }
 
   myData.mapAuthorCount = mapAuthors.size;
