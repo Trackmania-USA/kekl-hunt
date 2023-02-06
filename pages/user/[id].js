@@ -127,7 +127,7 @@ export async function getStaticPaths() {
           authorScore: mapsDetail.authorScore,
           authorCount: authorCount,
           authorId: mapsDetail.author,
-          authorName: currentAuthor
+          authorName: !!currentAuthor?currentAuthor:"unknown"
         })
       }
       userFound = false
@@ -209,7 +209,7 @@ export async function getStaticPaths() {
 //console.log("players list: ",playersList)
   return {
     paths: paths,
-    //paths: [{params: {id: "MattDTO"}}],
+    //paths: [{params: {id: "rockskater89"}}],
     fallback: false, // can also be true or 'blocking'
   }
 }
@@ -219,10 +219,8 @@ export async function getStaticProps(context) {
   console.log("context ", context)
 
   const filenames = await fs.readdir(process.cwd())
-  console.log("filenames", filenames)
   var foundData = false;
   for (var file of filenames) {
-    console.log("file", file);
     if (file == "data.json") {
       foundData = true;
     }
@@ -376,7 +374,7 @@ export async function getStaticProps(context) {
         authorScore: mapsDetail.authorScore,
         authorCount: authorCount,
         authorId: mapsDetail.author,
-        authorName: currentAuthor
+        authorName: !!currentAuthor?currentAuthor:"unknown"
       })
       
       /*myMaps.push({
