@@ -204,7 +204,9 @@ export async function getStaticPaths() {
     p.name = player
     playersList.push(p)
     var params = {params:{id:player}}
-    paths.push(params)
+    if (p.medalCount > 0) {
+      paths.push(params)
+    }
   }
 //console.log("players list: ",playersList)
   return {
