@@ -5,29 +5,223 @@ import {
   useState
 }  from 'react'
 
-export async function getStaticProps(context) {
-  // fetch list of posts
+export async function getStaticPaths() {
+  // fetch list of users
   const response = await fetch(
     'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
   )
   const data = await response.json()
 
-  
+  var userData = {
+    worldRecords: [],
+    missingATs: [],
+    collectedATs: [],
+    playedButNoAT: [],
+    createdMaps: []
+  }
+  var myData = {
+    maps: [],
+    players: {},
+    mapAuthorCount: 0
+  }
 
+  var myMaps = []
+  var mapAuthors = new Set();
+  var userFound = false
+  var authorToNumberOfMapsCreatedBy = {};
+
+  var idToPlayerName = {}
+  for (var campaign of data.campaigns) {
+
+    var campaignName = campaign.detail.campaign.name;
+
+    // console.log("name, count", campaignName, campaign.mapsDetail.length);
+
+    for (var mapsDetail of campaign.mapsDetail) {
+      var record = campaign.mapsRecords[mapsDetail.mapUid];
+      
+      if (authorToNumberOfMapsCreatedBy[mapsDetail.author]) {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author]++;
+      } else {
+        authorToNumberOfMapsCreatedBy[mapsDetail.author] = 1;
+      }
+
+      // console.log(record)
+      var authorCount = 0;
+      var WRHolder = "";
+      var WRTime = 999999;
+      
+      if (!record.tops) {
+        record.tops = []; 
+      }
+      
+      for (var top of record.tops) {
+
+        idToPlayerName[top.player.id] = top.player.name;
+        var currentAuthor = idToPlayerName[mapsDetail.author]
+
+        if (!myData.players[top.player.name]) {
+          myData.players[top.player.name] = {
+            medalCount: 0,
+            WRCount: 0
+          }
+        }
+        if (top.time <= mapsDetail.authorScore) {
+          authorCount++;
+
+          myData.players[top.player.name].medalCount++;
+
+          /*if (top.player.name === username) {
+            userFound = true
+            userData.collectedATs.push({
+              name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+              campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+              authorScore: mapsDetail.authorScore,
+              authorCount: authorCount,
+              authorId: mapsDetail.author,
+              authorName: currentAuthor
+            })
+          }*/
+
+        }
+        else
+        {
+          /*if(top.player.name === username)
+          {
+          userData.missingATs.push({
+            name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            authorScore: mapsDetail.authorScore,
+            authorCount: authorCount,
+            authorId: mapsDetail.author,
+            authorName: currentAuthor
+          })*/
+          userFound = true
+
+          userData.playedButNoAT.push({
+            name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+            authorScore: mapsDetail.authorScore,
+            authorCount: authorCount,
+            authorId: mapsDetail.author,
+            authorName: !!currentAuthor?currentAuthor:"unknown"
+          })
+          }
+        }
+
+        if (top.time <= WRTime)
+        {
+          WRHolder = top.player.name
+          WRTime = top.time
+        }
+      }
+
+      
+      if(userFound === false)
+      {
+        userData.missingATs.push({
+          name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+          campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+          authorScore: mapsDetail.authorScore,
+          authorCount: authorCount,
+          authorId: mapsDetail.author,
+          authorName: currentAuthor
+        })
+      }
+      userFound = false
+      
+      if (WRHolder){
+        myData.players[WRHolder].WRCount++
+      }
+      //if(username === WRHolder) userData.worldRecords.push(mapsDetail);
+      /*if(username === WRHolder) userData.worldRecords.push({
+        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        authorScore: mapsDetail.authorScore,
+        authorCount: authorCount,
+        authorId: mapsDetail.author,
+        authorName: currentAuthor
+      })*/
+      
+      /*myMaps.push({
+        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        authorScore: mapsDetail.authorScore,
+        authorCount: authorCount,
+        authorId: mapsDetail.author,
+        authorName: ""
+      })*/
+    }
+  //}
+
+
+  var allMaps = []
+
+  for (var map of myMaps) {
+    map.authorName = idToPlayerName[map.authorId]
+    allMaps.push(map)
+  }
+  var mapCreatedCount = 0;
+  /*for (var id of Object.keys(authorToNumberOfMapsCreatedBy)) {
+    if (username === idToPlayerName[id]) {
+      mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
+    }
+  }*/
+
+  myData.mapAuthorCount = mapAuthors.size;
+  myData.maps = allMaps;
+  //console.log(myData.players["rockskater89"])
+
+  /*for (var campaign of data.campaigns) {
+
+  //  console.log("createdMaps", userData.createdMaps)
+    var campaignName = campaign.detail.campaign.name;
+
+   for (var mapsDetail of campaign.mapsDetail) {
+
+   // console.log("author", idToPlayerName[mapsDetail.author], username)
+    
+    if (username == idToPlayerName[mapsDetail.author]) {
+      userData.createdMaps.push({
+        name: mapsDetail.name.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        campaignName: campaignName.replace(/\$[TtIiSsWwNnMmGgZz$OoHhLlPpBb]/g, '').replace(/\$[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g, ''),
+        id: mapsDetail.mapUid,
+        authorName: username
+      })
+    }
+   }
+  }*/
+
+ // console.log(userData.createdMaps)
+  var paths = []
+  var playersList = []
+  for (var player in myData.players) {
+    var p = {}
+    p.medalCount = myData.players[player].medalCount
+    p.WRCount = myData.players[player].WRCount
+    p.name = player
+    playersList.push(p)
+    var params = {params:{id:player}}
+    paths.push(params)
+  }
+//console.log("players list: ",playersList)
   return {
-    props: {
-      data
-    },
+    paths: paths,
+    fallback: false, // can also be true or 'blocking'
   }
 }
-  
 
-export default function InfoPage({ data }) {
-  // console.log(data)
-  // do the data processing at build time!
-  //var username = context.query.name
-  const { query } = useRouter();
-  var username = query.name
+// `getStaticPaths` requires using `getStaticProps`
+export async function getStaticProps(context) {
+  console.log("context ", context)
+
+  const response = await fetch(
+    'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
+  )
+  const data = await response.json()
+
+  var username = context.params.id
+  console.log("username: ", username)
   var userData = {
     worldRecords: [],
     missingATs: [],
@@ -95,7 +289,7 @@ export default function InfoPage({ data }) {
               authorScore: mapsDetail.authorScore,
               authorCount: authorCount,
               authorId: mapsDetail.author,
-              authorName: currentAuthor
+              authorName: !!currentAuthor?currentAuthor:"unknown"
             })
           }
 
@@ -110,7 +304,7 @@ export default function InfoPage({ data }) {
             authorScore: mapsDetail.authorScore,
             authorCount: authorCount,
             authorId: mapsDetail.author,
-            authorName: currentAuthor
+            authorName: !!currentAuthor?currentAuthor:"unknown"
           })
           userFound = true
 
@@ -120,7 +314,7 @@ export default function InfoPage({ data }) {
             authorScore: mapsDetail.authorScore,
             authorCount: authorCount,
             authorId: mapsDetail.author,
-            authorName: currentAuthor
+            authorName: !!currentAuthor?currentAuthor:"unknown"
           })
           }
         }
@@ -141,7 +335,7 @@ export default function InfoPage({ data }) {
           authorScore: mapsDetail.authorScore,
           authorCount: authorCount,
           authorId: mapsDetail.author,
-          authorName: currentAuthor
+          authorName: !!currentAuthor?currentAuthor:"unknown"
         })
       }
       userFound = false
@@ -183,7 +377,7 @@ export default function InfoPage({ data }) {
       mapCreatedCount = authorToNumberOfMapsCreatedBy[id]
     }
   }
-
+userData.mapCreatedCount = mapCreatedCount
   myData.mapAuthorCount = mapAuthors.size;
   myData.maps = allMaps;
   //console.log(myData.players["rockskater89"])
@@ -218,6 +412,23 @@ export default function InfoPage({ data }) {
     p.name = player
     playersList.push(p)
   }
+  //console.log("user data", userData)
+  userData.username = username
+  return {
+    // Passed to the page component as props
+    props: { data: userData },
+  }
+}
+  
+
+export default function UserPage({ data }) {
+   //console.log(data)
+   var userData = data
+  // do the data processing at build time!
+  //var username = context.query.name
+  //const { query } = useRouter();
+  var username = userData.username
+  
 
   const [tab, setTab] = useState("missing");
 
@@ -257,7 +468,7 @@ export default function InfoPage({ data }) {
           </div>
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">Created Maps</div>
-            <div className="stat-value">{mapCreatedCount ? mapCreatedCount : 0}</div>
+            <div className="stat-value">{userData.mapCreatedCount ? userData.mapCreatedCount : 0}</div>
             <div className="stat-desc">by {username}</div>
           </div>
         </div>

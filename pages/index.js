@@ -190,7 +190,7 @@ export default function IndexPage({ myData }) {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
-                  <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                  <a className="btn btn-accent" href={`user/${player.name}`}>
                   
                   {player.name}</a>
                   
@@ -216,7 +216,7 @@ export default function IndexPage({ myData }) {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
-                  <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                  <a className="btn btn-accent" href={`user/${player.name}`}>
                   
                   {player.name}</a>
                   
@@ -251,7 +251,7 @@ export default function IndexPage({ myData }) {
                   </td>
                 <td className="">
 
-                   <a className="btn btn-accent" href={`info?name=${track.authorName}`}>{track.authorName}</a>
+                   <a className="btn btn-accent" href={`user/${track.authorName}`}>{track.authorName}</a>
 
                   </td>
                 <td>{track.authorCount}</td>
@@ -279,7 +279,7 @@ export default function IndexPage({ myData }) {
                   {index + 1}
                 </td>
                 <td className="">
-                <a className="btn btn-accent" href={`info?name=${player.name}`}>
+                <a className="btn btn-accent" href={`user/${player.name}`}>
                   
                   {player.name}</a>
                   </td>
