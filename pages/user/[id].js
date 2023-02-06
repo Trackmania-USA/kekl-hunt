@@ -1,5 +1,7 @@
 import Head from 'next/head'
 import {useRouter} from "next/router"
+import { promises as fs } from 'fs'
+import path from 'path'
 
 import {
   useState
@@ -207,6 +209,7 @@ export async function getStaticPaths() {
 //console.log("players list: ",playersList)
   return {
     paths: paths,
+    //paths: [{params: {id: "MattDTO"}}],
     fallback: false, // can also be true or 'blocking'
   }
 }
@@ -215,10 +218,33 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   console.log("context ", context)
 
-  const response = await fetch(
-    'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
-  )
-  const data = await response.json()
+  const filenames = await fs.readdir(process.cwd())
+  console.log("filenames", filenames)
+  var foundData = false;
+  for (var file of filenames) {
+    console.log("file", file);
+    if (file == "data.json") {
+      foundData = true;
+    }
+  }
+
+  var data;
+
+  if (foundData) {
+    // read file
+    const dataStr = await fs.readFile(path.join(process.cwd(), "data.json"), 'utf8', 
+    function (err) {console.log("err, failed to read file", err)})
+
+    data = JSON.parse(dataStr)
+  } else {
+    const response = await fetch(
+      'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
+    )
+    data = await response.json()
+    await fs.writeFile(path.join(process.cwd(), "data.json"), JSON.stringify(data), 'utf8', 
+            function (err) {console.log("err, failed to write file", err)})
+  }
+
 
   var username = context.params.id
   console.log("username: ", username)
