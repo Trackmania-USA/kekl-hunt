@@ -104,7 +104,7 @@ Click start wait for the timeouts after both phases ends you're forced to freelo
                 <div class="divider">KEKL Host Notes</div>
                 <p>150, 145, 140, 135, 130, 125, 120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20 ,15, 10, 5</p>
                 <p>30s timeout<p>
-                <p>1 warmup 7 seconds</p
+                <p>1 warmup 7 seconds</p>
             </article>
             </div>
 
