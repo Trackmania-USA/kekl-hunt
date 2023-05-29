@@ -204,7 +204,9 @@ export async function getStaticPaths() {
     p.name = player
     playersList.push(p)
     var params = {params:{id:player}}
-    if (p.medalCount > 0) {
+
+    // TODO only generate player pages if they have at least 4 medals
+    if (p.medalCount > 3) {
       paths.push(params)
     }
   }
