@@ -240,7 +240,7 @@ export async function getStaticProps(context) {
     data = JSON.parse(dataStr)
   } else {
     const response = await fetch(
-      'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
+      'https://github.com/Trackmania-USA/kekl-track-data/releases/download/LATEST/data.json'
     )
     data = await response.json()
     await fs.writeFile(path.join(process.cwd(), "data.json"), JSON.stringify(data), 'utf8', 
