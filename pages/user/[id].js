@@ -10,7 +10,7 @@ import {
 export async function getStaticPaths() {
   // fetch list of users
   const response = await fetch(
-    'https://raw.githubusercontent.com/Trackmania-USA/kekl-track-data/main/data.json'
+    'https://github.com/Trackmania-USA/kekl-track-data/releases/download/LATEST/data.json'
   )
   const data = await response.json()
 
