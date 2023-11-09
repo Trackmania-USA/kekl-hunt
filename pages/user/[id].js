@@ -542,7 +542,7 @@ export default function UserPage({ data }) {
                 <td className="">{wr.campaignName}</td>
               <td className="max-w-xl truncate">{wr.name}</td>
               <td className="">
-              <a className="btn btn-accent" href={`info?name=${wr.authorName}`}>{wr.authorName}</a>
+              <a className="btn btn-accent" href={`/user/${wr.authorName}`}>{wr.authorName}</a>
               
               </td>
             </tr>
@@ -570,7 +570,7 @@ export default function UserPage({ data }) {
                         <td className="">{missing.campaignName}</td>
                         <td className="max-w-xl truncate">{missing.name}</td>
                         <td className="">
-                        <a className="btn btn-accent" href={`info?name=${missing.authorName}`}>{missing.authorName}</a>
+                        <a className="btn btn-accent" href={`/user/${missing.authorName}`}>{missing.authorName}</a>
                         
                         </td>
                       </tr>
@@ -600,7 +600,7 @@ export default function UserPage({ data }) {
                         <td className="">{collected.campaignName}</td>
                         <td className="max-w-xl truncate">{collected.name}</td>
                         <td className="">
-                        <a className="btn btn-accent" href={`info?name=${collected.authorName}`}>{collected.authorName}</a>
+                        <a className="btn btn-accent" href={`/user/${collected.authorName}`}>{collected.authorName}</a>
                         
                         </td>
                       </tr>
@@ -631,7 +631,7 @@ export default function UserPage({ data }) {
                   <td className="">{played.campaignName}</td>
                   <td className="max-w-xl truncate">{played.name}</td>
                   <td className="">
-                  <a className="btn btn-accent" href={`info?name=${played.authorName}`}>{played.authorName}</a>
+                  <a className="btn btn-accent" href={`/user/${played.authorName}`}>{played.authorName}</a>
                   
                   </td>
                 </tr>
@@ -661,7 +661,7 @@ export default function UserPage({ data }) {
                         <td className="">{created.campaignName}</td>
                         <td className="max-w-xl truncate">{created.name}</td>
                         <td className="">
-                        <a className="btn btn-accent" href={`info?name=${created.authorName}`}>{created.authorName}</a>
+                        <a className="btn btn-accent" href={`/user/${created.authorName}`}>{created.authorName}</a>
                         
                         </td>
                       </tr>
