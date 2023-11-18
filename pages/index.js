@@ -2,8 +2,15 @@ import Head from 'next/head'
 import {
   useState
 }  from 'react'
+import fs from 'fs'
+import path from 'path'
 
 export async function getStaticProps() {
+
+  // fetch last update
+  const filePath = path.resolve(process.cwd(), 'data-updated.txt');
+  const lastUpdate = fs.readFileSync(filePath).toString();
+
   // fetch list of posts
   const response = await fetch(
     'https://github.com/Trackmania-USA/kekl-track-data/releases/download/LATEST/data.json'
@@ -14,6 +21,7 @@ export async function getStaticProps() {
   // do the data processing at build time!
 
   var myData = {
+    lastUpdate: lastUpdate,
     maps: [],
     players: {},
     mapAuthorCount: 0
@@ -131,7 +139,6 @@ export default function IndexPage({ myData }) {
 
   const [tab, setTab] = useState("ats");
 
-
   return (
     <main>
       <Head>
@@ -142,8 +149,8 @@ export default function IndexPage({ myData }) {
         
         <a className="btn btn-secondary" href="/about">
                   About and Rules!</a>
+        <div className="flex flex-column">
         <div className="stats shadow">
-
           <div className="stat bg-primary text-primary-content ">
             <div className="stat-title">Total Tracks</div>
             <div className="stat-value">{myData.maps.length}</div>
@@ -156,8 +163,13 @@ export default function IndexPage({ myData }) {
             <div className="stat-title">Player Count</div>
             <div className="stat-value">{playersList.length}</div>
           </div>
-
+          <div className="stat bg-primary text-primary-content ">
+            <div className="stat-title">Site Last Updated</div>
+            <div className="stat-value">{new Date(Number(myData.lastUpdate) * 1000).toLocaleDateString()}</div>
+          </div>
         </div>
+        </div>
+
       </div>    
       <div className="tabs tabs-boxed">
         <button className={"tab tab-lg " + (tab==="ats"? "tab-active" : "")}
