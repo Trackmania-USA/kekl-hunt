@@ -237,7 +237,16 @@ export async function getStaticProps(context) {
     const dataStr = await fs.readFile(path.join(process.cwd(), "data.json"), 'utf8', 
     function (err) {console.log("err, failed to read file", err)})
 
-    data = JSON.parse(dataStr)
+    try {
+      data = JSON.parse(dataStr)
+    } catch (e) {
+      console.log("TODO caught error", e);
+      console.log("Data str", dataStr);
+      const response = await fetch(
+        'https://github.com/Trackmania-USA/kekl-track-data/releases/download/LATEST/data.json'
+      )
+      data = await response.json()
+    }
   } else {
     const response = await fetch(
       'https://github.com/Trackmania-USA/kekl-track-data/releases/download/LATEST/data.json'
